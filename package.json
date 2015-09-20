@@ -1,0 +1,29 @@
+{
+  "name": "anyspawn",
+  "version": "1.0.0",
+  "description": "A way of using node as command scripting",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node ./node_modules/mocha/bin/_mocha --full-trace --compilers coffee:coffee-script/register --require test/common.coffee"
+  },
+  "keywords": [
+    "cmd",
+    "scripting",
+    "spawn",
+    "exec"
+  ],
+  "author": "Stéphane MBAPE",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^1.1.1",
+    "spawn-command": "0.0.2-1",
+    "username": "^1.0.0"
+  },
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "mocha": "^2.2.5"
+  }
+}
