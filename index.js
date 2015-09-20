@@ -233,6 +233,7 @@ function _spawnArgs(argv) {
         case 2:
             if (Array.isArray(argv[1])) {
                 // spawn cmd, Array
+                done = emptyFn;
             } else if ('function' === typeof argv[1]) {
                 // spawn cmd, Function
                 args = null
