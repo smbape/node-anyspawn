@@ -204,12 +204,12 @@ function _spawn(cmd, args, options) {
     var child;
     if (Array.isArray(args)) {
         if (options.prompt) {
-            options.prompt(cmd + ' ' + args.map(quoteArg).join(' '), options.cwd);
+            options.prompt(cmd + ' ' + args.map(quoteArg).join(' '), options.cwd, username, hostname);
         }
         child = child_process.spawn(cmd, args, options);
     } else {
         if (options.prompt) {
-            options.prompt(cmd, options.cwd);
+            options.prompt(cmd, options.cwd, username, hostname);
         }
         child = spawnCommand(cmd, options);
     }
@@ -306,7 +306,7 @@ function _spawnArgs(argv) {
     return [cmd, args, options, done];
 }
 
-function prompt(cmd, cwd) {
+function prompt(cmd, cwd, username, hostname) {
     var text = chalk.green(username + '@' + hostname) + ' ' + chalk.yellow(cwd) + '\n$ ' + cmd;
     console.log(text);
 }
