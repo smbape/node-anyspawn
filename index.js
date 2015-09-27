@@ -179,7 +179,7 @@ function spawnSeries(commands, options, callback, done) {
 
     function iterate(err) {
         var child, cmd, argv, args, opts;
-        if (err === 0 && ++i < _len) {
+        if (!err && ++i < _len) {
             cmd = commands[i];
             if (Array.isArray(cmd)) {
                 argv = _spawnArgs(cmd);
@@ -188,6 +188,10 @@ function spawnSeries(commands, options, callback, done) {
                 next = argv[3];
                 cmd = argv[0];
                 child = _spawn(cmd, args, opts, next);
+            } else if (isFunction(cmd)) {
+                cmd(iterate);
+                callback(cmd, child, opts, i);
+                return;
             } else {
                 opts = options;
                 child = _spawn(cmd, null, opts, emptyFn);
