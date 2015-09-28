@@ -1,4 +1,7 @@
-Look at test for more examples
+anyspawn
+=======
+
+Command line scripting in node made easier
 
 ```javascript
 var anyspawn = require('anyspawn');
@@ -22,7 +25,16 @@ anyspawn.exec('ls -a', {cwd: dir}, function(err, data) {
     console.log(err, data)
 });
 
-anyspawn.spawnSeries(['ls', 'ls -a', 'ls -al', 'ls -alh'], {cwd: dir, stdio: 'inherit'}, function(err) {
+anyspawn.spawnSeries([
+	'ls',
+	'ls -a',
+	function(next) {
+		console.log('another task');
+		next();
+	},
+	'ls -al',
+	'ls -alh'
+], {cwd: dir, stdio: 'inherit'}, function(err) {
     console.log(err)
 });
 
