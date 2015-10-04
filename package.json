@@ -1,13 +1,17 @@
 {
   "name": "anyspawn",
   "version": "1.0.0",
-  "description": "A way of using node as command scripting",
+  "description": "Command line scripting in node made easier",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
     "test": "node ./node_modules/mocha/bin/_mocha --full-trace --compilers coffee:coffee-script/register --require test/common.coffee"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/smbape/node-anyspawn"
   },
   "keywords": [
     "cmd",
@@ -17,6 +21,10 @@
   ],
   "author": "Stéphane MBAPE",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/smbape/node-anyspawn/issues"
+  },
+  "homepage": "https://github.com/smbape/node-anyspawn",
   "dependencies": {
     "chalk": "^1.1.1",
     "spawn-command": "0.0.2-1",
