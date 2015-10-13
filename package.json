@@ -1,6 +1,6 @@
 {
   "name": "anyspawn",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Command line scripting in node made easier",
   "main": "index.js",
   "directories": {
