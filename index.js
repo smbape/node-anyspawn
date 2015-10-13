@@ -164,8 +164,10 @@ function spawnSeries(commands, options, callback, done) {
             if (isFunction(options)) {
                 done = options;
                 options = {};
-                callback = emptyFn;
+            } else {
+                done = emptyFn;
             }
+            callback = emptyFn;
             break;
         case 3:
             if (isFunction(callback)) {

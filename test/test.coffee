@@ -213,4 +213,50 @@ describe 'any spawn', ->
             return
         return
 
+    it 'should accept 1 argument', ->
+        anyspawn.spawn 'ls -l'
+        anyspawn.spawn ['ls -l']
+        return
+
+    it 'should accept 2 arguments', (done)->
+        count = 2
+        next = (err)->
+            assert.ifError err
+            done() if --count is 0
+            return
+        anyspawn.spawn 'ls -l', {}
+        anyspawn.spawn ['ls -l'], {}
+        anyspawn.spawn 'ls -l', next
+        anyspawn.spawn ['ls -l'], next
+        return
+
+    it 'should accept 3 arguments', (done)->
+        count = 2
+        next = (err)->
+            assert.ifError err
+            done() if --count is 0
+            return
+        anyspawn.spawn 'ls -l', {}, next
+        anyspawn.spawn ['ls -l'], {}, next
+        return
+
+    it 'should spawnSeries accept 1 argument', ->
+        anyspawn.spawnSeries ['ls -l']
+        return
+
+    it 'should spawnSeries accept 2 arguments', (done)->
+        anyspawn.spawnSeries ['ls -l'], {}
+        anyspawn.spawnSeries ['ls -l'], done
+        return
+
+    it 'should spawnSeries accept 3 arguments', (done)->
+        count = 2
+        next = (err)->
+            assert.ifError err
+            done() if --count is 0
+            return
+        anyspawn.spawnSeries ['ls -l'], {}, next
+        anyspawn.spawnSeries ['ls -l'], (->), next
+        return
+
     return
