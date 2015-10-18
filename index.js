@@ -186,7 +186,7 @@ function spawnSeries(commands, options, callback, done) {
             if (Array.isArray(cmd)) {
                 argv = _spawnArgs(cmd);
                 args = argv[1];
-                opts = extend({}, argv[2], options);
+                opts = extend({}, options, argv[2]);
                 next = argv[3];
                 cmd = argv[0];
                 child = _spawn(cmd, args, opts, next);
