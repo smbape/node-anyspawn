@@ -1,3 +1,6 @@
+// jshint node: true
+'use strict';
+
 var child_process = require('child_process'),
     spawnCommand = require('spawn-command'),
     chalk = require('chalk'),
@@ -6,7 +9,6 @@ var child_process = require('child_process'),
     username = require('username').sync(),
     slice = Array.prototype.slice,
     defaults = {
-        stdio: 'pipe',
         prompt: prompt
     };
 
@@ -47,9 +49,7 @@ function spawn() {
         args = argv[1],
         options = argv[2],
         done = argv[3],
-        child = _spawn(cmd, args, options);
-
-    child.on('close', done);
+        child = _spawn(cmd, args, options, done);
 
     return child;
 }
@@ -180,7 +180,7 @@ function spawnSeries(commands, options, callback, done) {
     iterate(0);
 
     function iterate(err) {
-        var child, cmd, argv, args, opts;
+        var child, cmd, argv, args, opts, next;
         if (!err && ++i < _len) {
             cmd = commands[i];
             if (Array.isArray(cmd)) {
@@ -206,7 +206,7 @@ function spawnSeries(commands, options, callback, done) {
     }
 }
 
-function _spawn(cmd, args, options) {
+function _spawn(cmd, args, options, done) {
     var child;
     if (Array.isArray(args)) {
         if (options.prompt) {
@@ -218,6 +218,10 @@ function _spawn(cmd, args, options) {
             options.prompt(cmd, options.cwd, username, hostname);
         }
         child = spawnCommand(cmd, options);
+    }
+
+    if ('function' === typeof done) {
+        child.once('close', done);
     }
 
     return child;
@@ -242,12 +246,12 @@ function _spawnArgs(argv) {
                 done = emptyFn;
             } else if ('function' === typeof argv[1]) {
                 // spawn cmd, Function
-                args = null
+                args = null;
                 done = argv[1];
                 options = {};
             } else if (argv[1] && 'object' === typeof argv[1]) {
                 // spawn cmd, Object
-                args = null
+                args = null;
                 done = emptyFn;
                 options = argv[1];
             } else {
@@ -272,7 +276,7 @@ function _spawnArgs(argv) {
                 }
             } else if (argv[1] && 'object' === typeof argv[1] && 'function' === typeof argv[2]) {
                 // spawn cmd, Object, Function
-                args = null
+                args = null;
                 options = argv[1];
                 done = argv[2];
             } else {
@@ -301,9 +305,7 @@ function _spawnArgs(argv) {
             }
     }
 
-    options = extend({
-        cwd: process.cwd()
-    }, defaults, options);
+    options = extend({}, defaults, options);
 
     if (options.prompt && 'function' !== typeof options.prompt) {
         options.prompt = defaults.prompt;
@@ -313,7 +315,7 @@ function _spawnArgs(argv) {
 }
 
 function prompt(cmd, cwd, username, hostname) {
-    var text = chalk.green(username + '@' + hostname) + ' ' + chalk.yellow(cwd) + '\n$ ' + cmd;
+    var text = chalk.green(username + '@' + hostname) + ' ' + chalk.yellow(cwd || process.cwd()) + '\n$ ' + cmd;
     console.log(text);
 }
 
@@ -394,7 +396,7 @@ function extend() {
 // ==============
 // From lodash
 // ==============
-var objToString = Object.prototype.toString
+var objToString = Object.prototype.toString;
 
 function isObject(value) {
     // Avoid a V8 JIT bug in Chrome 19-20.
