@@ -86,13 +86,13 @@ function exec() {
     stdio = options.stdio || 'pipe';
     options.stdio = 'pipe';
 
-    if (stdio === 'inherit' || stdio[1] === 'inherit') {
+    if (stdio === 'inherit' || stdio[1] === 'inherit' || stdio[1] === 1 || stdio[1] === process.stdout) {
         pipeout = function(chunk) {
             process.stdout.write(chunk);
         };
     }
 
-    if (stdio === 'inherit' || stdio[2] === 'inherit') {
+    if (stdio === 'inherit' || stdio[2] === 'inherit' || stdio[2] === 2 || stdio[2] === process.stderr) {
         pipeerr = function(chunk) {
             process.stderr.write(chunk);
         };
