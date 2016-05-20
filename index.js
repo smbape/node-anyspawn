@@ -210,12 +210,12 @@ function _spawn(cmd, args, options, done) {
     var child;
     if (Array.isArray(args)) {
         if (options.prompt) {
-            options.prompt(cmd + ' ' + args.map(quoteArg).join(' '), options.cwd, username, hostname);
+            options.prompt(cmd + ' ' + args.map(quoteArg).join(' '), options.cwd, username, hostname, options);
         }
         child = child_process.spawn(cmd, args, options);
     } else {
         if (options.prompt) {
-            options.prompt(cmd, options.cwd, username, hostname);
+            options.prompt(cmd, options.cwd, username, hostname, options);
         }
         child = spawnCommand(cmd, options);
     }
