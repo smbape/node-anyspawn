@@ -184,11 +184,11 @@ function spawnSeries(commands, options, callback, done) {
         if (!err && ++i < _len) {
             cmd = commands[i];
             if (Array.isArray(cmd)) {
-                argv = _spawnArgs(cmd);
-                args = argv[1];
-                opts = extend({}, options, argv[2]);
-                next = argv[3];
+                argv = _spawnArgs(cmd, options);
                 cmd = argv[0];
+                args = argv[1];
+                opts = argv[2];
+                next = argv[3];
                 child = _spawn(cmd, args, opts, next);
             } else if (isFunction(cmd)) {
                 cmd(iterate);
@@ -227,7 +227,7 @@ function _spawn(cmd, args, options, done) {
     return child;
 }
 
-function _spawnArgs(argv) {
+function _spawnArgs(argv, currentDefaults) {
     argv = slice.call(argv);
     var cmd = argv[0],
         args = argv[1],
@@ -305,7 +305,7 @@ function _spawnArgs(argv) {
             }
     }
 
-    options = extend({}, defaults, options);
+    options = extend({}, defaults, currentDefaults, options);
 
     if (options.prompt && 'function' !== typeof options.prompt) {
         options.prompt = defaults.prompt;
