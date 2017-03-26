@@ -15,6 +15,7 @@ var child_process = require('child_process'),
 exports.spawn = spawn;
 exports.exec = exec;
 exports.spawnSeries = spawnSeries;
+exports.spawnParallel = spawnParallel;
 exports.quoteArg = quoteArg;
 exports.defaults = defaults;
 
@@ -84,7 +85,13 @@ function exec() {
         child, stdout, stderr, stdio;
 
     stdio = options.stdio || 'pipe';
-    options.stdio = 'pipe';
+    options.stdio = ['pipe', 'pipe', 'pipe'];
+
+    if (Array.isArray(stdio)) {
+        options.stdio[0] = stdio[0];
+    } else if ('string' === typeof stdio) {
+        options.stdio[0] = stdio;
+    }
 
     if (stdio === 'inherit' || stdio[1] === 'inherit' || stdio[1] === 1 || stdio[1] === process.stdout) {
         pipeout = function(chunk) {
@@ -202,6 +209,87 @@ function spawnSeries(commands, options, callback, done) {
             callback(cmd, child, opts, i);
         } else {
             done(err);
+        }
+    }
+}
+
+/**
+ * Spawn commands in series
+ * Usage
+ *     spawnParallel(Array commands)
+ *     spawnParallel(Array commands, Object options)
+ *     spawnParallel(Array commands, Function done)
+ *     spawnParallel(Array commands, Object options, Function done)
+ *     spawnParallel(Array commands, Object options, Function callback, Function done)
+ * @param  {Array}    commands commands to execute. If command is an array, it will be considered as arguments of spawn
+ * @param  {Object}   options  child process spawn options.
+ * @param  {Function} callback called with arguments (cmd, child, options, index)
+ * @param  {Function} done     called with arguments (error)
+ */
+function spawnParallel(commands, options, callback, done) {
+    var _len = commands.length,
+        errors = [],
+        hasError = false,
+        count = 0;
+
+    switch (arguments.length) {
+        case 1:
+            options = {};
+            callback = emptyFn;
+            done = emptyFn;
+            break;
+        case 2:
+            if (isFunction(options)) {
+                done = options;
+                options = {};
+            } else {
+                done = emptyFn;
+            }
+            callback = emptyFn;
+            break;
+        case 3:
+            if (isFunction(callback)) {
+                done = callback;
+                callback = emptyFn;
+            }
+            break;
+    }
+
+    for (var i = 0; i < _len; i++) {
+        iterate(commands[i], checkAndCallDone);
+    }
+
+    function iterate(cmd, checkAndCallDone) {
+        var child, argv, args, opts, next;
+
+        if (Array.isArray(cmd)) {
+            argv = _spawnArgs(cmd, options);
+            cmd = argv[0];
+            args = argv[1];
+            opts = argv[2];
+            next = argv[3];
+            child = _spawn(cmd, args, opts, next);
+        } else if (isFunction(cmd)) {
+            callback(cmd, child, opts, i);
+            cmd(checkAndCallDone);
+            return;
+        } else {
+            opts = options;
+            child = _spawn(cmd, null, opts, emptyFn);
+        }
+
+        callback(cmd, child, opts, i);
+        child.once('exit', checkAndCallDone);
+    }
+
+    function checkAndCallDone(err) {
+        if (err) {
+            hasError = true;
+        }
+        errors.push(err);
+
+        if (++count === _len) {
+            done(hasError ? errors : null);
         }
     }
 }
