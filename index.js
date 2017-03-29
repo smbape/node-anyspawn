@@ -202,7 +202,7 @@ function spawnSeries(commands, options, callback, done) {
                 callback(cmd, child, opts, i);
                 return;
             } else {
-                opts = options;
+                opts = getOptions(options);
                 child = _spawn(cmd, null, opts, emptyFn);
             }
             child.once('exit', iterate);
@@ -274,7 +274,7 @@ function spawnParallel(commands, options, callback, done) {
             cmd(checkAndCallDone);
             return;
         } else {
-            opts = options;
+            opts = getOptions(options);
             child = _spawn(cmd, null, opts, emptyFn);
         }
 
@@ -393,13 +393,19 @@ function _spawnArgs(argv, currentDefaults) {
             }
     }
 
-    options = extend({}, defaults, currentDefaults, options);
-
-    if (options.prompt && 'function' !== typeof options.prompt) {
-        options.prompt = defaults.prompt;
-    }
+    options = getOptions(options, currentDefaults);
 
     return [cmd, args, options, done];
+}
+
+function getOptions(options, currentDefaults) {
+    var opts = extend({}, defaults, currentDefaults, options);
+
+    if (opts.prompt && 'function' !== typeof opts.prompt) {
+        opts.prompt = defaults.prompt;
+    }
+
+    return opts;
 }
 
 function prompt(cmd, cwd, username, hostname) {
