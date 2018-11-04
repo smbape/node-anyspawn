@@ -1,3 +1,4 @@
+{assert} = require 'chai'
 anyspawn = require '../'
 sysPath = require 'path'
 prompt = anyspawn.defaults.prompt
@@ -131,6 +132,7 @@ describe 'any spawn', ->
         return
 
     it 'should series spawn commands line', (done) ->
+        this.timeout 5000
         dir = sysPath.resolve __dirname + '/../node_modules/.bin'
         data = {}
         commands = ['ls', 'ls -a', 'ls -al', 'ls -alh']
@@ -154,6 +156,7 @@ describe 'any spawn', ->
         return
 
     it 'should series spawn commands array', (done) ->
+        this.timeout 5000
         dir = sysPath.resolve __dirname + '/../node_modules/.bin'
         data = {}
         commands = [
@@ -219,6 +222,7 @@ describe 'any spawn', ->
         return
 
     it 'should accept 2 arguments', (done)->
+        this.timeout 5000
         count = 2
         next = (err)->
             assert.ifError err

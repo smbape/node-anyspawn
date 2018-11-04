@@ -2,3 +2,4 @@ node_modules
 /migrate.log
 /project.sublime-workspace
 /npm-debug.log
+/package-lock.json
