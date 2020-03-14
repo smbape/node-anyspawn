@@ -27,13 +27,13 @@
   },
   "homepage": "https://github.com/smbape/node-anyspawn",
   "dependencies": {
-    "chalk": "^1.1.1",
+    "chalk": "^3.0.0",
     "spawn-command": "0.0.2-1",
-    "username": "^1.0.0"
+    "username": "^5.1.0"
   },
   "devDependencies": {
-    "chai": "^3.2.0",
-    "coffee-script": "^1.10.0",
-    "mocha": "^5.2.0"
+    "chai": "^4.2.0",
+    "coffee-script": "^1.12.7",
+    "mocha": "^7.1.0"
   }
 }

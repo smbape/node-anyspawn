@@ -22,10 +22,10 @@ assertFilesExist = (actual, expected)->
 
 describe 'any spawn', ->
     FILES =
-        'ls': ['_mocha', '_mocha.cmd', 'mocha', 'mocha.cmd', 'username', 'username.cmd']
-        'ls -a': ['.', '..', '_mocha', '_mocha.cmd', 'mocha', 'mocha.cmd', 'username', 'username.cmd']
-        'ls -al': [/\s\.$/, /\s\.\.$/, /\s_mocha$/, /\s_mocha\.cmd$/, /\smocha$/, /\smocha\.cmd$/, /\susername$/, /\susername\.cmd$/]
-        'ls -alh': [/\s\.$/, /\s\.\.$/, /\s_mocha$/, /\s_mocha\.cmd$/, /\smocha$/, /\smocha\.cmd$/, /\susername$/, /\susername\.cmd$/]
+        'ls': ['_mocha', '_mocha.cmd', 'mocha', 'mocha.cmd', 'coffee', 'coffee.cmd']
+        'ls -a': ['.', '..', '_mocha', '_mocha.cmd', 'mocha', 'mocha.cmd', 'coffee', 'coffee.cmd']
+        'ls -al': [/\s\.$/, /\s\.\.$/, /\s_mocha$/, /\s_mocha\.cmd$/, /\smocha$/, /\smocha\.cmd$/, /\scoffee$/, /\scoffee\.cmd$/]
+        'ls -alh': [/\s\.$/, /\s\.\.$/, /\s_mocha$/, /\s_mocha\.cmd$/, /\smocha$/, /\smocha\.cmd$/, /\scoffee$/, /\scoffee\.cmd$/]
 
     it 'should spawn command line', (done) ->
         dir = sysPath.resolve __dirname + '/../node_modules/.bin'
